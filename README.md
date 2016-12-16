@@ -1,0 +1,1 @@
+[http://stackoverflow.com/questions/41190920/javascript-attach-events-to-elements-rendered-dynamically](http://stackoverflow.com/questions/41190920/javascript-attach-events-to-elements-rendered-dynamically)
