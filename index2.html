@@ -8,6 +8,51 @@
 			btn.innerHTML = "Hit me !";
 		document.getElementById("btn2");
 		document.body.insertBefore(btn, btn2);
+		//Pass the name you want to reload 
+		//loadjsV1('all.js');
+		//loadjsV2('all.js');
+		loadjsV3('all.js');
+	}
+	
+	function loadjsV1(js) {	
+		//selecting js file
+		var jsSection = document.querySelector('script[src="'+js+'"]');
+
+		//selecting parent node to remove js and add new js 
+		var parent = jsSection.parentElement;
+		//deleting js file
+		parent.removeChild(jsSection);
+
+		//creating new js file 
+		var script= document.createElement('script');
+		script.type= 'text/javascript';
+		script.src= js;
+
+		//adding new file in selected tag.
+		parent.appendChild(script);
+	}
+	   
+	function loadjsV2(path){
+		var oldScript = document.querySelector("script[src^='" + path + "']")
+			, newScript = document.createElement("script")
+			;       
+		// adding random get parameter to prevent caching
+		newScript.src = path + "?timestamp=" + Date.now();
+		oldScript.parentNode.replaceChild(newScript, oldScript);
+	}
+	
+	function loadjsV3(path) {
+		var scripts = document.getElementsByTagName('script')
+			, newScript = document.createElement("script");
+			
+		newScript.src = path + "?timestamp=" + Math.round(new Date().getTime()/1000);	
+			
+		for (var i = 0; i < scripts.length; ++i) { 		
+			var srcUrl = scripts[i].getAttribute('src');
+			if (srcUrl && srcUrl.indexOf(path) > -1) {				   
+			   scripts[i].parentNode.replaceChild(newScript, scripts[i]);
+			}			
+		}
 	}
 </script>
 <script type="text/javascript" src="all.js"></script>
