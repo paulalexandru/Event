@@ -1,0 +1,60 @@
+<html>
+<body>
+<button id="btn2" onclick="show()">Show</button>
+<!-- Wrappers -->
+    <script type="text/javascript">
+      var futureElementsRef = {};
+      
+      // Custom "getElementById" wrapper
+      document._getElementByIdRef = document.getElementById;
+      document.getElementById = function(elemId) {
+         var result = document._getElementByIdRef(elemId) || futureElementsRef[elemId];
+        
+         if (!result) {
+            var elem = { 
+              id: elemId, 
+              pseudo: true,  // This is useful if you need to check somewhere else whether the element is actually a dom/pseudo element
+              events: [],
+              addEventListener: function(eventName, func) {
+                this.events.push({eventName: eventName, func: func});
+              }
+              // Add here if you need to capture more events
+            };
+           
+           result = futureElementsRef[elemId] = elem;
+         }
+
+         return result;
+      };
+      
+      // Custom "createElement" wrapper
+      document._createElementRef = document.createElement;
+      document.createElement = function(elemType, elemId) {
+        var elem = document._createElementRef(elemType);
+        
+        if(elemId) {
+          elem.setAttribute("id", elemId);
+          var storedElem = futureElementsRef[elemId];
+          
+          if(storedElem) {
+             storedElem.events.map(function(evt) {
+                elem.addEventListener(evt.eventName, evt.func);
+             });
+          }
+        }
+        
+        return elem;
+      };
+    </script>
+<script type="text/javascript">
+	function show(){
+		var btn = document.createElement("BUTTON", "btn1");
+                //btn.setAttribute("id", "btn1");
+                btn.innerHTML = "Hit me !";
+            var btn2 = document.getElementById("btn2");
+            document.body.insertBefore(btn, btn2);
+	}
+</script>
+<script type="text/javascript" src="all.js"></script>
+</body>
+</html>
