@@ -8,6 +8,21 @@
 			btn.innerHTML = "Hit me !";
 		document.getElementById("btn2");
 		document.body.insertBefore(btn, btn2);
+		resetJs('all.js');
+	}
+	
+	function resetJs(path) {
+		var scripts = document.getElementsByTagName('script')
+			, newScript = document.createElement("script");
+			
+		newScript.src = path + "?timestamp=" + Math.round(new Date().getTime()/1000);	
+			
+		for (var i = 0; i < scripts.length; ++i) { 		
+			var srcUrl = scripts[i].getAttribute('src');
+			if (srcUrl && srcUrl.indexOf(path) > -1) {				   
+			   scripts[i].parentNode.replaceChild(newScript, scripts[i]);
+			}			
+		}
 	}
 </script>
 <script type="text/javascript" src="all.js"></script>
